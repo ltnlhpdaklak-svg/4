@@ -61,6 +61,7 @@ const QUICK = [10000, 50000, 100000, 250000, 500000]
 export default function FunShop() {
   const [wallet, setWallet] = useState({ balance: 1000000, unlimited: false, user: null })
   const [bet, setBet] = useState(10000)
+  const [side, setSide] = useState('P')
   const [happy, setHappy] = useState(false)
   const [busy, setBusy] = useState(false)
   const [table, setTable] = useState({ banker: [], player: [], result: '' })
@@ -78,7 +79,8 @@ export default function FunShop() {
     setTable(next)
     setHappy(true)
     if (!wallet.unlimited) {
-      const delta = next.result === 'T' ? 0 : next.result === 'P' ? bet : -bet
+      const win = next.result === side
+      const delta = next.result === 'T' ? 0 : win ? bet : -bet
       const balance = wallet.balance + delta
       setWallet((w) => ({ ...w, balance }))
       await updateWallet(balance)
@@ -103,10 +105,10 @@ export default function FunShop() {
 
       <div className="w-full rounded-t-[50%] border-t-4 border-emerald-900 bg-emerald-950 px-6 pb-6 pt-14">
         <div className="mx-auto grid max-w-2xl grid-cols-2 gap-8">
-          <div className={`flex flex-col items-center gap-3 rounded-lg border p-4 ${table.result === 'P' ? 'border-sky-500 bg-sky-950/40' : 'border-emerald-800/60'}`}>
+          <div className={`flex flex-col items-center gap-3 rounded-lg border p-4 ${side === 'P' ? 'border-sky-600 bg-sky-950/20' : 'border-emerald-800/60'} ${table.result === 'P' ? 'ring-1 ring-sky-400' : ''}`}>
             <div className="flex items-center gap-3">
               <span className="text-4xl text-neutral-200">{p}</span>
-              <span className="flex size-10 items-center justify-center rounded-full border-2 border-dashed border-sky-400 text-[10px] font-bold text-sky-300">{bet / 1000}k</span>
+              {side === 'P' && <span className="flex size-10 items-center justify-center rounded-full border-2 border-dashed border-sky-400 text-[10px] font-bold text-sky-300">{bet / 1000}k</span>}
             </div>
             <div className="flex gap-1">
               {table.player.map((c, i) => <Card key={i} card={c} />)}
@@ -114,10 +116,10 @@ export default function FunShop() {
             </div>
             <span className="text-xs tracking-[0.3em] text-sky-300">PLAYER</span>
           </div>
-          <div className={`flex flex-col items-center gap-3 rounded-lg border p-4 ${table.result === 'B' ? 'border-rose-500 bg-rose-950/40' : 'border-emerald-800/60'}`}>
+          <div className={`flex flex-col items-center gap-3 rounded-lg border p-4 ${side === 'B' ? 'border-rose-600 bg-rose-950/20' : 'border-emerald-800/60'} ${table.result === 'B' ? 'ring-1 ring-rose-400' : ''}`}>
             <div className="flex items-center gap-3">
               <span className="text-4xl text-neutral-200">{b}</span>
-              <span className="flex size-10 items-center justify-center rounded-full border-2 border-dashed border-rose-400 text-[10px] font-bold text-rose-300">{bet / 1000}k</span>
+              {side === 'B' && <span className="flex size-10 items-center justify-center rounded-full border-2 border-dashed border-rose-400 text-[10px] font-bold text-rose-300">{bet / 1000}k</span>}
             </div>
             <div className="flex gap-1">
               {table.banker.map((c, i) => <Card key={i} card={c} />)}
@@ -129,6 +131,10 @@ export default function FunShop() {
       </div>
 
       <div className="flex w-full max-w-xl flex-col items-center gap-4">
+        <div className="flex gap-3">
+          <button type="button" onClick={() => setSide('P')} className={`rounded border px-8 py-2 text-sm tracking-widest transition-colors ${side === 'P' ? 'border-sky-500 bg-sky-950 text-sky-200' : 'border-neutral-700 text-neutral-500 hover:border-neutral-500'}`}>P</button>
+          <button type="button" onClick={() => setSide('B')} className={`rounded border px-8 py-2 text-sm tracking-widest transition-colors ${side === 'B' ? 'border-rose-500 bg-rose-950 text-rose-200' : 'border-neutral-700 text-neutral-500 hover:border-neutral-500'}`}>B</button>
+        </div>
         <div className="flex flex-wrap justify-center gap-2">
           {QUICK.map((v) => (
             <button key={v} type="button" onClick={() => setBet(v)} className={`rounded border px-3 py-1.5 text-xs transition-colors ${bet === v ? 'border-rose-600 bg-rose-950 text-rose-200' : 'border-neutral-700 text-neutral-400 hover:border-neutral-500'}`}>

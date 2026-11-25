@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 
 const STORAGE = 'baccarat-room'
+const MAX_DEALS = 50
 
 const SUITS = ['♠', '♥', '♦', '♣']
+const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 const load = () => {
   try {
@@ -14,16 +16,17 @@ const load = () => {
 
 const drawCard = () => ({
   suit: SUITS[Math.floor(Math.random() * 4)],
-  rank: ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'][Math.floor(Math.random() * 13)],
+  rank: RANKS[Math.floor(Math.random() * 13)],
 })
 
 const scoreOf = (cards) => cards.reduce((n, c) => n + ({ A: 1, J: 10, Q: 10, K: 10 }[c.rank] ?? Number(c.rank)), 0) % 10
 
-function Card({ card, hidden }) {
+function Card({ card }) {
   if (!card) return <span className="block h-20 w-14 rounded border border-dashed border-emerald-700/60" />
+  const red = card.suit === '♥' || card.suit === '♦'
   return (
-    <span className={`flex h-20 w-14 flex-col items-center justify-center rounded border bg-neutral-100 shadow-lg ${hidden ? 'bg-emerald-900 text-emerald-900' : ''}`}>
-      <span className={`text-lg leading-none ${card.suit === '♥' || card.suit === '♦' ? 'text-rose-600' : 'text-neutral-900'}`}>{card.suit}</span>
+    <span className="flex h-20 w-14 flex-col items-center justify-center rounded border border-neutral-300 bg-neutral-100 shadow-lg">
+      <span className={`text-lg leading-none ${red ? 'text-rose-600' : 'text-neutral-900'}`}>{card.suit}</span>
       <span className="mt-1 text-sm font-bold leading-none text-neutral-900">{card.rank}</span>
     </span>
   )
@@ -31,29 +34,42 @@ function Card({ card, hidden }) {
 
 export default function FunShop() {
   const [state, setState] = useState(load)
+  const [hearts, setHearts] = useState([])
 
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(state))
   }, [state])
 
   const deal = () => {
-    if (state.credits < 10000 || state.tipped >= 10) return
+    if (state.credits < 10000 || state.tipped >= MAX_DEALS) return
     const banker = [drawCard(), drawCard()]
     const player = [drawCard(), drawCard()]
     if (scoreOf(player) < 6) player.push(drawCard())
     if (scoreOf(banker) < 6) banker.push(drawCard())
     setState((s) => ({ ...s, credits: s.credits - 10000, tipped: s.tipped + 1, happy: true, banker, player }))
+    const id = Date.now()
+    setHearts((h) => [...h, { id, x: Math.random() * 80 - 40 }])
+    setTimeout(() => setHearts((h) => h.filter((item) => item.id !== id)), 1600)
   }
 
   return (
     <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-between gap-8 px-6 py-8 font-mono text-neutral-200">
-      <div className="flex gap-2 self-center">
-        {Array.from({ length: state.tipped }).map((_, i) => (
-          <span key={i} className="h-2 w-2 rounded-full bg-rose-500" />
+      <div className="flex h-3 gap-1 self-center">
+        {Array.from({ length: state.tipped }).slice(-50).map((_, i) => (
+          <span key={i} className="h-1.5 w-1.5 rounded-full bg-rose-500" />
         ))}
       </div>
 
       <div className="relative h-44 w-40 self-end">
+        {hearts.map((h) => (
+          <span
+            key={h.id}
+            className="pointer-events-none absolute left-1/2 top-0 animate-bounce text-rose-500"
+            style={{ transform: `translateX(${h.x}px)` }}
+          >
+            ♥
+          </span>
+        ))}
         <div className={`absolute bottom-0 left-1/2 h-20 w-24 -translate-x-1/2 rounded-t-full ${state.happy ? 'bg-rose-950' : 'bg-neutral-900'}`} />
         <div className={`absolute bottom-16 left-1/2 h-14 w-14 -translate-x-1/2 rounded-full ${state.happy ? 'bg-rose-200' : 'bg-neutral-300'}`} />
         <div className="absolute bottom-[4.5rem] left-1/2 flex -translate-x-1/2 gap-2">
@@ -92,7 +108,7 @@ export default function FunShop() {
         <button
           type="button"
           onClick={deal}
-          disabled={state.credits < 10000 || state.tipped >= 10}
+          disabled={state.credits < 10000 || state.tipped >= MAX_DEALS}
           className="flex h-16 w-16 items-center justify-center rounded-full border border-rose-900 bg-rose-950 text-2xl text-rose-200 transition-transform hover:scale-105 active:scale-95 disabled:opacity-30"
           aria-label="deal"
         >

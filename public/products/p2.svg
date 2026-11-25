@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="p2 - ảnh minh họa">
+  <rect width="400" height="400" fill="#F5F5F5"/>
+  <ellipse cx="200" cy="292" rx="150" ry="10" fill="#171717" fill-opacity="0.08"/>
+  <g stroke="#171717" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <g>
+      <path d="M70 166 L197 166 L197 220 Q197 252 165 252 L100 252 Q70 252 70 222 Z" fill="#171717" fill-opacity="0.9"/>
+      <path d="M70 184 L16 172"/>
+      <path d="M86 186 Q94 174 110 172" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="5"/>
+    </g>
+    <g transform="matrix(-1 0 0 1 400 0)">
+      <path d="M70 166 L197 166 L197 220 Q197 252 165 252 L100 252 Q70 252 70 222 Z" fill="#171717" fill-opacity="0.9"/>
+      <path d="M70 184 L16 172"/>
+    </g>
+    <path d="M197 182 Q200 176 203 182"/>
+  </g>
+  <text x="200" y="356" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#737373" letter-spacing="2">4EYEWEAR · ẢNH MINH HỌA</text>
+</svg>

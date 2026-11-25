@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Hộp đựng kính - ảnh minh họa">
+  <rect width="400" height="400" fill="#F5F5F5"/>
+  <ellipse cx="200" cy="292" rx="150" ry="10" fill="#171717" fill-opacity="0.08"/>
+  <rect x="64" y="130" width="272" height="132" rx="40" fill="#171717"/>
+  <rect x="80" y="146" width="240" height="100" rx="30" fill="#E5E5E5"/>
+  <path d="M200 146 L200 246" stroke="#171717" stroke-width="6"/>
+  <text x="200" y="356" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#737373" letter-spacing="2">4EYEWEAR · ẢNH MINH HỌA</text>
+</svg>

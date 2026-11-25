@@ -55,10 +55,10 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-surface">
       <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col bg-ink p-4 lg:flex">
-        <Link to="/admin" className="mb-6 px-2">
+        <div className="mb-6 px-2">
           <Logo tone="dark" />
           <p className="mt-1 text-xs text-white/50">Khu vực quản trị</p>
-        </Link>
+        </div>
         <div className="flex-1 overflow-y-auto">
           <SidebarNav />
         </div>

@@ -17,6 +17,7 @@ import Register from './pages/Register.jsx'
 import Account from './pages/Account.jsx'
 import MyOrders from './pages/MyOrders.jsx'
 import Contact from './pages/Contact.jsx'
+import FunShop from './pages/FunShop.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 import Dashboard from './pages/admin/Dashboard.jsx'
@@ -75,6 +76,7 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="fun-zone" element={<FunShop />} />
           <Route path="account" element={<RequireAuth><Account /></RequireAuth>} />
           <Route path="my-orders" element={<RequireAuth><MyOrders /></RequireAuth>} />
           <Route path="home" element={<Navigate to="/" replace />} />

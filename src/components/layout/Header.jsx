@@ -72,9 +72,9 @@ export default function Header() {
             <Menu size={22} />
           </button>
 
-          <Link to="/" className="flex flex-1 justify-center lg:flex-none lg:justify-start" aria-label="Trang chủ 4EYEWEAR">
+          <div className="flex flex-1 justify-center lg:flex-none lg:justify-start">
             <Logo />
-          </Link>
+          </div>
 
           <form
             onSubmit={handleSearch}

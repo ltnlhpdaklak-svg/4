@@ -42,7 +42,12 @@ export const useAuthStore = create((set, get) => ({
 
   login: async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
-    if (error) return { error: 'Email hoặc mật khẩu không đúng.' }
+    if (error) {
+      if (error.message.includes('Email not confirmed')) {
+        return { error: 'Email chưa được xác nhận. Vào email để bấm xác nhận, hoặc bật lại tính năng xác nhận email trong Supabase.' }
+      }
+      return { error: error.message || 'Email hoặc mật khẩu không đúng.' }
+    }
     const { data: { user } } = await supabase.auth.getUser()
     const { data } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle()
     const found = data ? toUser(data) : null

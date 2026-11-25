@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import MainLayout from './components/layout/MainLayout.jsx'
 import AdminLayout from './components/layout/AdminLayout.jsx'
 import RequireAuth from './components/common/RequireAuth.jsx'
+import GuestGate from './components/common/GuestGate.jsx'
 import Toaster from './components/common/Toaster.jsx'
 import { trackEvent } from './utils/analytics.js'
 
@@ -69,7 +70,7 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
 
-        <Route element={<RequireAuth><MainLayout /></RequireAuth>}>
+        <Route element={<GuestGate><MainLayout /></GuestGate>}>
           <Route index element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<ProductDetail />} />
@@ -77,8 +78,8 @@ export default function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="order-success/:code" element={<OrderSuccess />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="account" element={<Account />} />
-          <Route path="my-orders" element={<MyOrders />} />
+          <Route path="account" element={<RequireAuth><Account /></RequireAuth>} />
+          <Route path="my-orders" element={<RequireAuth><MyOrders /></RequireAuth>} />
           <Route path="home" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFound />} />
         </Route>

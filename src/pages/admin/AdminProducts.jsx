@@ -20,6 +20,7 @@ const EMPTY_FORM = {
   sale_price: '',
   stock: '',
   is_active: true,
+  featured: false,
   image_url: '',
 }
 
@@ -31,6 +32,7 @@ const toForm = (p) => ({
   sale_price: p.sale_price ? String(p.sale_price) : '',
   stock: String(p.stock),
   is_active: p.is_active,
+  featured: p.featured ?? false,
   image_url: p.image_url,
 })
 
@@ -106,6 +108,7 @@ function ProductFormModal({ product, categories, onClose }) {
       sale_price: form.sale_price === '' ? null : Number(form.sale_price),
       stock: Number(form.stock),
       is_active: form.is_active,
+      featured: form.featured,
       image_url: form.image_url,
     }
 
@@ -162,6 +165,13 @@ function ProductFormModal({ product, categories, onClose }) {
           <label className="flex h-10 items-center gap-2 text-sm text-ink">
             <input id="p-active" type="checkbox" className="accent-brand" checked={form.is_active} onChange={set('is_active')} />
             Đang hiển thị và bán
+          </label>
+        </FormField>
+
+        <FormField label="Ghim lên đầu" htmlFor="p-featured">
+          <label className="flex h-10 items-center gap-2 text-sm text-ink">
+            <input id="p-featured" type="checkbox" className="accent-brand" checked={form.featured} onChange={set('featured')} />
+            Hiện đầu danh sách sản phẩm
           </label>
         </FormField>
 
@@ -265,6 +275,7 @@ export default function AdminProducts() {
               <th className="px-4 py-3 font-semibold">Tồn kho</th>
               <th className="px-4 py-3 font-semibold">Đã bán</th>
               <th className="px-4 py-3 font-semibold">Hiển thị</th>
+              <th className="px-4 py-3 font-semibold">Ghim</th>
               <th className="px-4 py-3 text-right font-semibold"><span className="sr-only">Thao tác</span></th>
             </tr>
           </thead>
@@ -310,6 +321,24 @@ export default function AdminProducts() {
                       <span
                         className={`inline-block size-5 transform rounded-full bg-white shadow transition-transform ${
                           p.is_active ? 'translate-x-5' : 'translate-x-0.5'
+                        }`}
+                      />
+                    </button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={Boolean(p.featured)}
+                      aria-label={`Ghim ${p.name}`}
+                      onClick={() => updateProduct(p.id, { featured: !p.featured })}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        p.featured ? 'bg-brand' : 'bg-neutral-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block size-5 transform rounded-full bg-white shadow transition-transform ${
+                          p.featured ? 'translate-x-5' : 'translate-x-0.5'
                         }`}
                       />
                     </button>

@@ -25,6 +25,7 @@ create table if not exists public.products (
   sale_price integer check (sale_price is null or sale_price >= 0),
   image_url text not null default '',
   stock integer not null default 0 check (stock >= 0),
+  featured boolean not null default false,
   sold_count integer not null default 0,
   view_count integer not null default 0,
   is_active boolean not null default true,

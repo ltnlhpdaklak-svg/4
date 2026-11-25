@@ -9,6 +9,9 @@ import { effectivePrice } from '../utils/format.js'
 
 const ICONS = { Sun, Eye, Glasses, Dumbbell, Baby, Sparkles }
 
+// Sản phẩm được ghim trong admin luôn đứng đầu mọi danh sách.
+const pinFirst = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+
 function Banner() {
   const navigate = useNavigate()
   return (
@@ -66,16 +69,25 @@ export default function Home() {
   const active = useMemo(() => allProducts.filter((p) => p.is_active), [allProducts])
 
   const featured = useMemo(
-    () => [...active].sort((a, b) => b.sold_count + b.view_count - (a.sold_count + a.view_count)).slice(0, 6),
+    () => [...active].sort((a, b) => pinFirst(a, b) || b.sold_count + b.view_count - (a.sold_count + a.view_count)).slice(0, 6),
     [active]
   )
   const newest = useMemo(
-    () => [...active].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6),
+    () => [...active].sort((a, b) => pinFirst(a, b) || new Date(b.created_at) - new Date(a.created_at)).slice(0, 6),
     [active]
   )
-  const bestSellers = useMemo(() => [...active].sort((a, b) => b.sold_count - a.sold_count).slice(0, 6), [active])
-  const mostViewed = useMemo(() => [...active].sort((a, b) => b.view_count - a.view_count).slice(0, 6), [active])
-  const deals = useMemo(() => active.filter((p) => effectivePrice(p) < p.price).slice(0, 4), [active])
+  const bestSellers = useMemo(
+    () => [...active].sort((a, b) => pinFirst(a, b) || b.sold_count - a.sold_count).slice(0, 6),
+    [active]
+  )
+  const mostViewed = useMemo(
+    () => [...active].sort((a, b) => pinFirst(a, b) || b.view_count - a.view_count).slice(0, 6),
+    [active]
+  )
+  const deals = useMemo(
+    () => active.filter((p) => effectivePrice(p) < p.price).sort(pinFirst).slice(0, 4),
+    [active]
+  )
 
   return (
     <div className="space-y-10 md:space-y-12">

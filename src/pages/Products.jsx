@@ -62,22 +62,23 @@ export default function Products() {
     if (filters.max !== '' && !Number.isNaN(max)) list = list.filter((p) => effectivePrice(p) <= max)
     if (filters.inStock) list = list.filter((p) => p.stock > 0)
 
+    const pinFirst = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
     const sorted = [...list]
     switch (filters.sort) {
       case 'price_asc':
-        sorted.sort((a, b) => effectivePrice(a) - effectivePrice(b))
+        sorted.sort((a, b) => pinFirst(a, b) || effectivePrice(a) - effectivePrice(b))
         break
       case 'price_desc':
-        sorted.sort((a, b) => effectivePrice(b) - effectivePrice(a))
+        sorted.sort((a, b) => pinFirst(a, b) || effectivePrice(b) - effectivePrice(a))
         break
       case 'best':
-        sorted.sort((a, b) => b.sold_count - a.sold_count)
+        sorted.sort((a, b) => pinFirst(a, b) || b.sold_count - a.sold_count)
         break
       case 'viewed':
-        sorted.sort((a, b) => b.view_count - a.view_count)
+        sorted.sort((a, b) => pinFirst(a, b) || b.view_count - a.view_count)
         break
       default:
-        sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        sorted.sort((a, b) => pinFirst(a, b) || new Date(b.created_at) - new Date(a.created_at))
     }
     return sorted
   }, [products, category, keyword, filters.min, filters.max, filters.inStock, filters.sort])

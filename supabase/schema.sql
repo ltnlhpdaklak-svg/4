@@ -160,6 +160,26 @@ as $$
   );
 $$;
 
+-- Xóa policy cũ trước khi tạo lại để file này chạy được nhiều lần.
+drop policy if exists "public read categories" on public.categories;
+drop policy if exists "admin write categories" on public.categories;
+drop policy if exists "public read products" on public.products;
+drop policy if exists "admin write products" on public.products;
+drop policy if exists "read own profile" on public.profiles;
+drop policy if exists "update own profile" on public.profiles;
+drop policy if exists "admin manage profiles" on public.profiles;
+drop policy if exists "read own orders" on public.orders;
+drop policy if exists "create orders" on public.orders;
+drop policy if exists "admin update orders" on public.orders;
+drop policy if exists "insert events" on public.events;
+drop policy if exists "admin read events" on public.events;
+drop policy if exists "public read contact settings" on public.contact_settings;
+drop policy if exists "admin write contact settings" on public.contact_settings;
+drop policy if exists "insert contact messages" on public.contact_messages;
+drop policy if exists "admin read contact messages" on public.contact_messages;
+drop policy if exists "admin reply contact messages" on public.contact_messages;
+drop policy if exists "admin delete contact messages" on public.contact_messages;
+
 -- Mọi người xem được danh mục/sản phẩm đang bán; chỉ admin sửa.
 create policy "public read categories" on public.categories for select using (true);
 create policy "admin write categories" on public.categories for all using (public.is_admin()) with check (public.is_admin());

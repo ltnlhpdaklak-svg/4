@@ -42,7 +42,7 @@ export default function Header() {
       {/* Dải trên cùng (desktop) */}
       <div className="hidden bg-ink text-xs text-white lg:block">
         <div className="mx-auto flex h-8 max-w-7xl items-center justify-between px-6">
-          <span className="tracking-wide">Cửa hàng kính mắt của lớp D26TDK1</span>
+          <span className="tracking-wide">Miễn phí giao hàng cho đơn từ 500.000đ · Hỗ trợ 24/7</span>
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-white/80">Xin chào, {user.full_name}</span>
@@ -51,7 +51,7 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <Link to="/contact" className="hover:text-brand">Liên hệ nhóm 4</Link>
+              <Link to="/contact" className="hover:text-brand">Liên hệ</Link>
               <Link to="/login" className="hover:text-brand">Đăng nhập</Link>
               <span className="text-white/40">|</span>
               <Link to="/register" className="hover:text-brand">Đăng ký</Link>
@@ -145,7 +145,7 @@ export default function Header() {
                 </Link>
               ))}
 
-              <Link to="/contact" className="mt-6 block rounded-md px-3 py-2.5 font-medium text-brand hover:bg-brand-soft">Liên hệ nhóm 4</Link>
+              <Link to="/contact" className="mt-6 block rounded-md px-3 py-2.5 font-medium text-brand hover:bg-brand-soft">Liên hệ hỗ trợ</Link>
               <p className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-ink-muted">Tài khoản</p>
               {user ? (
                 <>

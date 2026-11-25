@@ -15,14 +15,14 @@ function Banner() {
     <section className="relative overflow-hidden rounded-lg bg-brand-soft">
       <div className="grid aspect-[16/10] grid-cols-1 sm:aspect-[16/8] md:aspect-[16/6] md:grid-cols-2">
         <div className="flex flex-col justify-center gap-3 p-6 md:p-12">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand">4EYEWEAR · Nhóm 4</span>
-          <h1 className="text-2xl font-extrabold leading-tight text-ink md:text-4xl">Kính mắt cho cả lớp.</h1>
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand">BỘ SƯU TẬP MỚI</span>
+          <h1 className="text-2xl font-extrabold leading-tight text-ink md:text-4xl">Đẹp mắt, hợp giá, dễ đeo.</h1>
           <p className="max-w-md text-sm text-ink-muted md:text-base">
-            Kính râm, kính cận và gọng kính cho mọi phong cách. Chọn mẫu ưng ý rồi đặt hàng với nhóm 4.
+            Kính râm, kính cận và gọng kính chính hãng. Chọn mẫu ưng ý, đặt hàng nhanh, giao tận nơi.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <Button size="lg" onClick={() => navigate('/products')}>Khám phá ngay</Button>
-            <Button size="lg" variant="outline" onClick={() => navigate('/contact')}>Liên hệ nhóm 4</Button>
+            <Button size="lg" onClick={() => navigate('/products')}>Mua ngay</Button>
+            <Button size="lg" variant="outline" onClick={() => navigate('/contact')}>Liên hệ hỗ trợ</Button>
           </div>
         </div>
         <div className="relative hidden md:block">

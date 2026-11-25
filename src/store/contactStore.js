@@ -3,8 +3,8 @@ import { supabase } from '../lib/supabase.js'
 
 const DEFAULT_SETTINGS = {
   id: 1,
-  group_name: 'Nhóm 4',
-  intro: 'Liên hệ với nhóm 4 để được hỗ trợ đặt hàng và giải đáp thắc mắc.',
+  group_name: '4EYEWEAR',
+  intro: 'Liên hệ với chúng tôi để được hỗ trợ đặt hàng và giải đáp thắc mắc.',
   zalo_link: '',
   facebook_link: '',
   email: '',

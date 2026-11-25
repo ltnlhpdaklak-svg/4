@@ -293,7 +293,7 @@ export default function Checkout() {
               <input type="radio" name="payment" checked readOnly className="accent-brand" />
               <span className="font-medium text-ink">{PAYMENT_METHOD_LABEL}</span>
             </label>
-            <p className="text-xs text-ink-muted">Thanh toán trực tiếp cho nhóm 4 khi nhận kính.</p>
+            <p className="text-xs text-ink-muted">Thanh toán khi nhận hàng. Bạn sẽ được liên hệ để xác nhận đơn.</p>
           </section>
         </form>
 

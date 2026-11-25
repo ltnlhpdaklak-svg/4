@@ -57,7 +57,7 @@ export default function Contact() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Liên hệ nhóm 4" description="Cần hỗ trợ đặt hàng hoặc muốn hỏi thêm? Nhắn tin cho nhóm 4 tại đây." />
+      <PageHeader title="Liên hệ" description="Cần hỗ trợ đặt hàng hoặc muốn hỏi thêm về sản phẩm? Gửi tin cho chúng tôi tại đây." />
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <section className="rounded-lg border border-line bg-white p-5 md:p-6">
@@ -66,13 +66,13 @@ export default function Contact() {
               <CheckCircle2 size={40} className="text-brand" />
               <h2 className="mt-4 text-lg font-bold text-ink">Đã gửi tin nhắn</h2>
               <p className="mt-2 max-w-sm text-sm text-ink-muted">
-                Nhóm 4 đã nhận được tin của bạn. Chúng mình sẽ phản hồi sớm nhất có thể.
+                Chúng tôi đã nhận được tin của bạn và sẽ phản hồi sớm nhất có thể.
               </p>
               <Button className="mt-6" variant="outline" onClick={() => setSent(false)}>Gửi tin khác</Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              <h2 className="text-base font-semibold text-ink">Gửi tin cho nhóm 4</h2>
+              <h2 className="text-base font-semibold text-ink">Gửi tin nhắn</h2>
               <div className="grid gap-4 md:grid-cols-2">
                 <FormField label="Họ và tên" htmlFor="name" required error={errors.full_name}>
                   <input id="name" value={form.full_name} onChange={update('full_name')} className={inputClass(!!errors.full_name)} />
@@ -101,14 +101,14 @@ export default function Contact() {
 
         <aside className="h-fit space-y-4">
           <div className="rounded-lg border border-line bg-white p-5">
-            <h2 className="text-base font-semibold text-ink">{settings.group_name || 'Nhóm 4'}</h2>
+            <h2 className="text-base font-semibold text-ink">4EYEWEAR</h2>
             <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-              {settings.intro || 'Liên hệ với nhóm 4 để được hỗ trợ đặt hàng.'}
+              {settings.intro || 'Liên hệ với chúng tôi để được hỗ trợ đặt hàng và giải đáp thắc mắc.'}
             </p>
             <div className="mt-5 space-y-3 text-sm">
               {settings.zalo_link && (
                 <a href={settings.zalo_link} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-md bg-brand-soft p-3 font-medium text-brand hover:underline">
-                  <MessageCircle size={18} /> Nhắn Zalo nhóm 4
+                  <MessageCircle size={18} /> Nhắn Zalo
                 </a>
               )}
               {settings.facebook_link && (

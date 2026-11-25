@@ -1,6 +1,6 @@
 # 4EYEWEAR
 
-Cửa hàng kính mắt nội bộ của lớp D26TDK1 (Nhóm 4). Khách trong lớp xem sản phẩm, đặt hàng COD và nhắn tin cho nhóm 4. Admin quản lý sản phẩm, danh mục, đơn hàng, tài khoản, liên hệ và thống kê.
+Cửa hàng kính mắt trực tuyến: khách xem sản phẩm, đặt hàng COD và gửi tin nhắn hỗ trợ. Admin quản lý sản phẩm, danh mục, đơn hàng, tài khoản, liên hệ và thống kê.
 
 ## Chạy locally
 
@@ -14,7 +14,13 @@ npm run dev
 
 1. Tạo project Supabase mới.
 2. Mở **SQL Editor**, dán toàn bộ nội dung `supabase/schema.sql` rồi chạy. File này tạo bảng, RLS và chỉ seed danh mục + sản phẩm — **không có đơn hàng hay khách hàng giả**.
-3. Vào **Authentication → Users → Add user**, tạo tài khoản admin bằng email và mật khẩu bạn muốn. Sau đó trong bảng `profiles`, đổi cột `role` của user đó thành `admin`.
+3. Vào **Authentication → Users → Add user**, tạo tài khoản admin bằng email và mật khẩu bạn muốn. Sau đó chạy lệnh này trong SQL Editor (thay email bằng email bạn vừa tạo):
+
+   ```sql
+   update public.profiles set role = 'admin' where email = 'admin@cuaHang.com';
+   ```
+
+   Nếu bảng `products` vẫn trống, chạy thêm `supabase/seed.sql`.
 4. Giữ nguyên các khóa `VITE_SUPABASE_URL` và `VITE_SUPABASE_ANON_KEY` trong `.env.local` (chỉ dùng anon public key, không đưa service_role vào frontend).
 
 ## Đăng nhập

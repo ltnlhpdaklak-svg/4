@@ -124,8 +124,8 @@ create table if not exists public.contact_messages (
 -- Admin đổi nội dung liên hệ (link Zalo, email, hotline, giới thiệu nhóm).
 create table if not exists public.contact_settings (
   id integer primary key default 1 check (id = 1),
-  group_name text not null default 'Nhóm 4',
-  intro text not null default '',
+  group_name text not null default '4EYEWEAR',
+  intro text not null default 'Liên hệ với chúng tôi để được hỗ trợ đặt hàng.',
   zalo_link text not null default '',
   facebook_link text not null default '',
   email text not null default '',
@@ -134,7 +134,7 @@ create table if not exists public.contact_settings (
 );
 
 insert into public.contact_settings (id, group_name, intro)
-values (1, 'Nhóm 4', 'Liên hệ với nhóm 4 để được hỗ trợ đặt hàng và giải đáp thắc mắc.')
+values (1, '4EYEWEAR', 'Liên hệ với chúng tôi để được hỗ trợ đặt hàng và giải đáp thắc mắc.')
 on conflict (id) do nothing;
 
 -- ---------------------------------------------------------------------------

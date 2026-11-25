@@ -16,8 +16,8 @@ export const useEventStore = create((set) => ({
     await supabase.from('events').insert({
       event_name: event.event_name,
       session_id: event.session_id ?? '',
-      user_id: user_id ?? null,
-      product_id: product_id ?? null,
+      user_id: event.user_id ?? null,
+      product_id: event.product_id ?? null,
       metadata: event.metadata ?? {},
       created_at: event.created_at ?? new Date().toISOString(),
     })

@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { RotateCcw, ShoppingBag, Sparkles } from 'lucide-react'
 import Button from '../components/common/Button.jsx'
 
 const MASKS = [
-  { id: 'idol', name: 'Idol Live', face: '🎤', price: 100, tag: 'Hát live' },
-  { id: 'hacker', name: 'Hacker', face: '🕶️', price: 250, tag: 'Ẩn danh' },
-  { id: 'killer', name: 'Killer', face: '😈', price: 500, tag: 'Đáng sợ' },
-  { id: 'ghost', name: 'Ghost', face: '👻', price: 800, tag: 'Vô hình' },
+  { id: 'idol', name: 'IDOL LIVE', code: 'IL-01', price: 100 },
+  { id: 'hacker', name: 'HACKER', code: 'HK-02', price: 250 },
+  { id: 'killer', name: 'KILLER', code: 'KL-03', price: 500 },
+  { id: 'ghost', name: 'GHOST', code: 'GH-04', price: 800 },
 ]
 
-const STORAGE = '4eyewear-mask-shop'
+const STORAGE = 'mask-shop'
 
-const loadState = () => {
+const load = () => {
   try {
     const raw = localStorage.getItem(STORAGE)
     if (raw) return JSON.parse(raw)
@@ -21,60 +20,62 @@ const loadState = () => {
 }
 
 export default function FunShop() {
-  const [state, setState] = useState(loadState)
-  const [message, setMessage] = useState('')
+  const [state, setState] = useState(load)
+  const [note, setNote] = useState('')
 
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(state))
   }, [state])
 
-  const buy = (mask) => {
+  const choose = (mask) => {
     if (state.owned.includes(mask.id)) {
       setState((s) => ({ ...s, equipped: mask.id }))
-      setMessage(`Đã đeo ${mask.name}`)
+      setNote('')
       return
     }
     if (state.coins < mask.price) {
-      setMessage('Chưa đủ xu')
+      setNote('NOT ENOUGH')
       return
     }
     setState((s) => ({ ...s, coins: s.coins - mask.price, owned: [...s.owned, mask.id], equipped: mask.id }))
-    setMessage(`Mua ${mask.name}`)
+    setNote('')
   }
 
   const reset = () => {
     setState({ coins: 300, owned: [], equipped: null })
-    setMessage('')
+    setNote('')
   }
 
   const current = MASKS.find((m) => m.id === state.equipped)
-  const equippedCount = state.owned.length
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 py-6">
-      <div className="rounded-lg bg-ink p-6 text-center text-white">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand">Khu vực bí mật</p>
-        <h1 className="mt-2 text-2xl font-extrabold md:text-3xl">MASK SHOP 🎭</h1>
-        <p className="mt-1 text-sm text-white/70">Mặt nạ giả tưởng. Chỉ để vui.</p>
-        <div className="mt-5 flex flex-wrap justify-center gap-2 text-sm">
-          <span className="rounded-md bg-white/10 px-3 py-2">💰 {state.coins} xu</span>
-          <span className="rounded-md bg-white/10 px-3 py-2">🎭 {equippedCount}/4</span>
+    <div className="mx-auto max-w-3xl space-y-8 py-8 font-mono">
+      <header className="border-b border-neutral-800 pb-6">
+        <div className="flex items-baseline justify-between">
+          <h1 className="text-xl font-bold uppercase tracking-[0.35em] text-neutral-100">The Mask Shop</h1>
+          <span className="text-[10px] tracking-widest text-neutral-500">EST. 2026</span>
         </div>
+        <p className="mt-2 text-[11px] tracking-[0.2em] text-neutral-500">NO QUESTIONS. NO REFUNDS.</p>
+      </header>
+
+      <div className="flex justify-between text-xs tracking-widest text-neutral-400">
+        <span>BALANCE <span className="text-neutral-100">{state.coins}</span></span>
+        <span>COLLECTION <span className="text-neutral-100">{state.owned.length}/4</span></span>
       </div>
 
-      {message && (
-        <p className="rounded-md border border-brand bg-brand-soft px-4 py-3 text-center text-sm font-medium text-brand">{message}</p>
-      )}
+      {note && <p className="text-xs tracking-widest text-neutral-300">{note}</p>}
 
-      <section className="rounded-lg border border-line bg-white p-5 text-center">
-        <p className="text-xs text-ink-muted">Đang đeo</p>
-        <div className="my-3 text-7xl">{current?.face ?? '🙂'}</div>
-        <p className="text-sm font-semibold text-ink">{current?.name ?? 'Chưa đeo mặt nạ'}</p>
+      <section className="border border-neutral-800 bg-neutral-950 p-8 text-center">
+        <p className="text-[10px] tracking-[0.3em] text-neutral-500">CURRENT</p>
+        <div className="mx-auto my-6 flex size-32 items-center justify-center rounded-full border border-neutral-700 bg-neutral-900 text-4xl text-neutral-300">
+          {current ? current.code.slice(0, 2) : '--'}
+        </div>
+        <p className="text-sm tracking-[0.25em] text-neutral-200">{current?.name ?? 'NONE'}</p>
       </section>
 
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-ink"><ShoppingBag size={18} /> Chọn mặt nạ</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <p className="mb-3 text-[10px] tracking-[0.3em] text-neutral-500">CATALOGUE</p>
+        <div className="grid grid-cols-2 gap-px bg-neutral-800 sm:grid-cols-4">
           {MASKS.map((m) => {
             const owned = state.owned.includes(m.id)
             const active = state.equipped === m.id
@@ -82,24 +83,23 @@ export default function FunShop() {
               <button
                 key={m.id}
                 type="button"
-                onClick={() => buy(m)}
-                className={`rounded-lg border p-4 text-center transition-colors ${
-                  active ? 'border-brand bg-brand-soft' : 'border-line bg-white hover:border-brand'
+                onClick={() => choose(m)}
+                className={`bg-neutral-950 p-5 text-left transition-colors hover:bg-neutral-900 ${
+                  active ? 'bg-neutral-900 ring-1 ring-neutral-600' : ''
                 }`}
               >
-                <div className="text-4xl">{m.face}</div>
-                <p className="mt-2 text-sm font-semibold text-ink">{m.name}</p>
-                <p className="mt-0.5 text-xs text-ink-muted">{m.tag}</p>
-                <p className="mt-2 text-xs font-medium text-brand">{owned ? 'Đã có' : `${m.price} xu`}</p>
+                <p className="text-[10px] tracking-widest text-neutral-500">{m.code}</p>
+                <p className="mt-3 text-sm font-bold tracking-widest text-neutral-200">{m.name}</p>
+                <p className="mt-4 text-xs text-neutral-400">{owned ? 'OWNED' : `${m.price}`}</p>
               </button>
             )
           })}
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Button variant="outline" onClick={reset}><RotateCcw size={16} /> Chơi lại</Button>
-        <span className="flex items-center gap-1 text-xs text-ink-muted"><Sparkles size={14} /> <Link to="/" className="hover:text-brand">Về cửa hàng kính</Link></span>
+      <div className="flex items-center justify-between border-t border-neutral-800 pt-6">
+        <Button variant="ghost" size="sm" onClick={reset} className="text-neutral-400">RESET</Button>
+        <Link to="/" className="text-[11px] tracking-widest text-neutral-500 hover:text-neutral-300">EXIT</Link>
       </div>
     </div>
   )

@@ -76,12 +76,13 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="fun-zone" element={<FunShop />} />
           <Route path="account" element={<RequireAuth><Account /></RequireAuth>} />
           <Route path="my-orders" element={<RequireAuth><MyOrders /></RequireAuth>} />
           <Route path="home" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+
+        <Route path="fun-zone" element={<div className="min-h-screen bg-black text-neutral-200"><FunShop /></div>} />
 
         <Route path="admin" element={<RequireAuth role="admin"><AdminLayout /></RequireAuth>}>
           <Route index element={<Dashboard />} />

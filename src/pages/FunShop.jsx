@@ -1,105 +1,68 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import Button from '../components/common/Button.jsx'
 
-const MASKS = [
-  { id: 'idol', name: 'IDOL LIVE', code: 'IL-01', price: 100 },
-  { id: 'hacker', name: 'HACKER', code: 'HK-02', price: 250 },
-  { id: 'killer', name: 'KILLER', code: 'KL-03', price: 500 },
-  { id: 'ghost', name: 'GHOST', code: 'GH-04', price: 800 },
-]
-
-const STORAGE = 'mask-shop'
+const STORAGE = 'dealer-room'
 
 const load = () => {
   try {
     const raw = localStorage.getItem(STORAGE)
     if (raw) return JSON.parse(raw)
   } catch {}
-  return { coins: 300, owned: [], equipped: null }
+  return { credits: 100000, tipped: 0, happy: false }
 }
 
 export default function FunShop() {
   const [state, setState] = useState(load)
-  const [note, setNote] = useState('')
+  const [deal, setDeal] = useState(0)
 
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(state))
   }, [state])
 
-  const choose = (mask) => {
-    if (state.owned.includes(mask.id)) {
-      setState((s) => ({ ...s, equipped: mask.id }))
-      setNote('')
-      return
-    }
-    if (state.coins < mask.price) {
-      setNote('NOT ENOUGH')
-      return
-    }
-    setState((s) => ({ ...s, coins: s.coins - mask.price, owned: [...s.owned, mask.id], equipped: mask.id }))
-    setNote('')
+  const tip = () => {
+    if (state.credits < 10000 || state.tipped >= 10) return
+    setState((s) => ({ ...s, credits: s.credits - 10000, tipped: s.tipped + 1, happy: true }))
+    setDeal((d) => d + 1)
   }
-
-  const reset = () => {
-    setState({ coins: 300, owned: [], equipped: null })
-    setNote('')
-  }
-
-  const current = MASKS.find((m) => m.id === state.equipped)
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 py-8 font-mono">
-      <header className="border-b border-neutral-800 pb-6">
-        <div className="flex items-baseline justify-between">
-          <h1 className="text-xl font-bold uppercase tracking-[0.35em] text-neutral-100">The Mask Shop</h1>
-          <span className="text-[10px] tracking-widest text-neutral-500">EST. 2026</span>
-        </div>
-        <p className="mt-2 text-[11px] tracking-[0.2em] text-neutral-500">NO QUESTIONS. NO REFUNDS.</p>
-      </header>
-
-      <div className="flex justify-between text-xs tracking-widest text-neutral-400">
-        <span>BALANCE <span className="text-neutral-100">{state.coins}</span></span>
-        <span>COLLECTION <span className="text-neutral-100">{state.owned.length}/4</span></span>
+    <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-10 px-6 py-10 font-mono text-neutral-200">
+      <div className="flex gap-2">
+        {Array.from({ length: state.tipped }).map((_, i) => (
+          <span key={i} className="h-2 w-2 rounded-full bg-rose-500" />
+        ))}
       </div>
 
-      {note && <p className="text-xs tracking-widest text-neutral-300">{note}</p>}
-
-      <section className="border border-neutral-800 bg-neutral-950 p-8 text-center">
-        <p className="text-[10px] tracking-[0.3em] text-neutral-500">CURRENT</p>
-        <div className="mx-auto my-6 flex size-32 items-center justify-center rounded-full border border-neutral-700 bg-neutral-900 text-4xl text-neutral-300">
-          {current ? current.code.slice(0, 2) : '--'}
+      <div className="relative h-56 w-44">
+        <div className={`absolute bottom-0 left-1/2 h-24 w-28 -translate-x-1/2 rounded-t-full transition-colors duration-300 ${state.happy ? 'bg-rose-950' : 'bg-neutral-900'}`} />
+        <div className={`absolute bottom-20 left-1/2 h-16 w-16 -translate-x-1/2 rounded-full transition-colors duration-300 ${state.happy ? 'bg-rose-200' : 'bg-neutral-300'}`} />
+        <div className="absolute bottom-[5.4rem] left-1/2 flex -translate-x-1/2 gap-3">
+          <span className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${state.happy ? 'h-0.5 w-3 bg-rose-900' : 'bg-neutral-800'}`} />
+          <span className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${state.happy ? 'h-0.5 w-3 bg-rose-900' : 'bg-neutral-800'}`} />
         </div>
-        <p className="text-sm tracking-[0.25em] text-neutral-200">{current?.name ?? 'NONE'}</p>
-      </section>
+        <div className={`absolute bottom-[3.9rem] left-1/2 h-1 -translate-x-1/2 rounded-full transition-all duration-300 ${state.happy ? 'w-6 bg-rose-900' : 'w-3 bg-neutral-800'}`} />
 
-      <section>
-        <p className="mb-3 text-[10px] tracking-[0.3em] text-neutral-500">CATALOGUE</p>
-        <div className="grid grid-cols-2 gap-px bg-neutral-800 sm:grid-cols-4">
-          {MASKS.map((m) => {
-            const owned = state.owned.includes(m.id)
-            const active = state.equipped === m.id
-            return (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => choose(m)}
-                className={`bg-neutral-950 p-5 text-left transition-colors hover:bg-neutral-900 ${
-                  active ? 'bg-neutral-900 ring-1 ring-neutral-600' : ''
-                }`}
-              >
-                <p className="text-[10px] tracking-widest text-neutral-500">{m.code}</p>
-                <p className="mt-3 text-sm font-bold tracking-widest text-neutral-200">{m.name}</p>
-                <p className="mt-4 text-xs text-neutral-400">{owned ? 'OWNED' : `${m.price}`}</p>
-              </button>
-            )
-          })}
+        <div className="absolute bottom-28 left-0 h-20 w-14 -rotate-12 rounded border border-neutral-500 bg-neutral-100" key={`l-${deal}`}>
+          <span className={`absolute left-2 top-2 text-lg ${deal % 2 ? 'text-rose-600' : 'text-neutral-900'}`}>{deal % 2 ? '♥' : '♠'}</span>
         </div>
-      </section>
+        <div className="absolute bottom-24 right-0 h-20 w-14 rotate-12 rounded border border-neutral-500 bg-neutral-100" key={`r-${deal}`}>
+          <span className={`absolute left-2 top-2 text-lg ${deal % 3 ? 'text-rose-600' : 'text-neutral-900'}`}>{deal % 3 ? '♦' : '♣'}</span>
+        </div>
+      </div>
 
-      <div className="flex items-center justify-between border-t border-neutral-800 pt-6">
-        <Button variant="ghost" size="sm" onClick={reset} className="text-neutral-400">RESET</Button>
-        <Link to="/" className="text-[11px] tracking-widest text-neutral-500 hover:text-neutral-300">EXIT</Link>
+      <div className="flex flex-col items-center gap-5">
+        <div className="h-px w-64 bg-neutral-800" />
+        <div className="flex items-center gap-6">
+          <span className="text-2xl tabular-nums text-neutral-300">{state.credits.toLocaleString('vi-VN')}</span>
+          <button
+            type="button"
+            onClick={tip}
+            disabled={state.credits < 10000 || state.tipped >= 10}
+            className="flex h-16 w-16 items-center justify-center rounded-full border border-rose-900 bg-rose-950 text-2xl text-rose-200 transition-transform hover:scale-105 active:scale-95 disabled:opacity-30"
+            aria-label="tip"
+          >
+            ♥
+          </button>
+        </div>
       </div>
     </div>
   )

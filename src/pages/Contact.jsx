@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { CheckCircle2, Mail, MessageCircle, Phone, Send } from 'lucide-react'
+import { formatDateTime } from '../utils/format.js'
 import Button from '../components/common/Button.jsx'
 import FormField, { inputClass } from '../components/common/FormField.jsx'
 import PageHeader from '../components/common/PageHeader.jsx'
@@ -12,6 +13,8 @@ export default function Contact() {
   const settings = useContactStore((s) => s.settings)
   const loadSettings = useContactStore((s) => s.loadSettings)
   const sendMessage = useContactStore((s) => s.sendMessage)
+  const messages = useContactStore((s) => s.messages)
+  const loadMessages = useContactStore((s) => s.loadMessages)
   const [form, setForm] = useState(EMPTY)
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
@@ -19,7 +22,8 @@ export default function Contact() {
 
   useEffect(() => {
     loadSettings()
-  }, [loadSettings])
+    loadMessages()
+  }, [loadSettings, loadMessages])
 
   const update = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -45,6 +49,7 @@ export default function Contact() {
       message: form.message.trim(),
       reply: '',
       replied_at: null,
+      is_public: true,
     })
     setSubmitting(false)
     if (result.error) {
@@ -53,6 +58,7 @@ export default function Contact() {
     }
     setSent(true)
     setForm(EMPTY)
+    loadMessages()
   }
 
   return (
@@ -133,6 +139,53 @@ export default function Contact() {
           </div>
         </aside>
       </div>
+
+      <section className="rounded-lg border border-line bg-white p-5 md:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Hỏi đáp từ khách hàng</h2>
+            <p className="mt-1 text-xs text-ink-muted">Câu hỏi và câu trả lời từ 4EYEWEAR, hiển thị cho mọi người.</p>
+          </div>
+          <button type="button" onClick={loadMessages} className="text-xs font-semibold text-brand hover:underline">Làm mới</button>
+        </div>
+
+        <ul className="mt-5 space-y-5">
+          {messages.map((m) => (
+            <li key={m.id} className="border-b border-line pb-5 last:border-0 last:pb-0">
+              <div className="flex gap-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand">
+                  {m.full_name?.trim().charAt(0)?.toUpperCase() ?? 'K'}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm">
+                    <span className="font-semibold text-ink">{m.full_name}</span>
+                    <span className="ml-2 text-xs text-ink-muted">{formatDateTime(m.created_at)}</span>
+                  </p>
+                  {m.subject && <p className="mt-0.5 text-xs font-medium text-brand">{m.subject}</p>}
+                  <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-ink">{m.message}</p>
+
+                  {m.reply && (
+                    <div className="mt-3 flex gap-3 rounded-md border border-line bg-surface p-3">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-bold text-white">4E</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-ink">
+                          4EYEWEAR <span className="ml-2 rounded-full bg-brand px-2 py-0.5 text-[10px] text-white">Đã trả lời</span>
+                        </p>
+                        <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-ink">{m.reply}</p>
+                        {m.replied_at && <p className="mt-1 text-[11px] text-ink-muted">{formatDateTime(m.replied_at)}</p>}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {messages.length === 0 && (
+          <p className="mt-6 text-sm text-ink-muted">Chưa có câu hỏi nào. Bạn có thể là người đầu tiên gửi tin nhắn!</p>
+        )}
+      </section>
     </div>
   )
 }

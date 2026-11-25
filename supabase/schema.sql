@@ -119,6 +119,7 @@ create table if not exists public.contact_messages (
   message text not null,
   reply text not null default '',
   replied_at timestamptz,
+  is_public boolean not null default true,
   created_at timestamptz not null default now()
 );
 

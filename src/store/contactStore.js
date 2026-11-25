@@ -53,6 +53,14 @@ export const useContactStore = create((set, get) => ({
     return { error: error?.message }
   },
 
+  togglePublic: async (id, isPublic) => {
+    const { error } = await supabase.from('contact_messages').update({ is_public: isPublic }).eq('id', id)
+    if (!error) {
+      set((s) => ({ messages: s.messages.map((m) => (m.id === id ? { ...m, is_public: isPublic } : m)) }))
+    }
+    return { error: error?.message }
+  },
+
   deleteMessage: async (id) => {
     const { error } = await supabase.from('contact_messages').delete().eq('id', id)
     if (!error) set((s) => ({ messages: s.messages.filter((m) => m.id !== id) }))

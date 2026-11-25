@@ -17,6 +17,7 @@ export default function AdminContacts() {
   const loadMessages = useContactStore((s) => s.loadMessages)
   const replyMessage = useContactStore((s) => s.replyMessage)
   const deleteMessage = useContactStore((s) => s.deleteMessage)
+  const togglePublic = useContactStore((s) => s.togglePublic)
   const [form, setForm] = useState(settings)
   const [saving, setSaving] = useState(false)
   const [selected, setSelected] = useState(null)
@@ -103,6 +104,7 @@ export default function AdminContacts() {
                 <th className="px-4 py-3 font-semibold">Tiêu đề</th>
                 <th className="px-4 py-3 font-semibold">Thời gian</th>
                 <th className="px-4 py-3 font-semibold">Trạng thái</th>
+                <th className="px-4 py-3 font-semibold">Hiện trên web</th>
                 <th className="px-4 py-3 text-right font-semibold">Thao tác</th>
               </tr>
             </thead>
@@ -119,6 +121,24 @@ export default function AdminContacts() {
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${m.reply ? 'bg-brand-soft text-brand' : 'bg-amber-50 text-amber-700'}`}>
                       {m.reply ? 'Đã trả lời' : 'Chưa trả lời'}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={m.is_public !== false}
+                      aria-label={`Hiện tin ${m.full_name}`}
+                      onClick={() => togglePublic(m.id, m.is_public === false)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        m.is_public !== false ? 'bg-green-600' : 'bg-neutral-300'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block size-5 transform rounded-full bg-white shadow transition-transform ${
+                          m.is_public !== false ? 'translate-x-5' : 'translate-x-0.5'
+                        }`}
+                      />
+                    </button>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-1">

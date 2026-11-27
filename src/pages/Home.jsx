@@ -19,9 +19,9 @@ function Banner() {
       <div className="grid aspect-[16/10] grid-cols-1 sm:aspect-[16/8] md:aspect-[16/6] md:grid-cols-2">
         <div className="flex flex-col justify-center gap-3 p-6 md:p-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-brand">Bộ Sưu Tập Mới</span>
-          <h1 className="text-2xl font-extrabold leading-tight text-ink md:text-4xl">Mắt Kính MUCE - D26TDK1 - N4</h1>
+          <h1 className="text-2xl font-extrabold leading-tight text-ink md:text-4xl">Mắt Kính MUCE - D26TDK1</h1>
           <p className="max-w-md text-sm text-ink-muted md:text-base">
-            Kính râm, kính cận và gọng kính chính hãng..
+            Kính râm, kính cận và gọng kính chính hãng.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <Button size="lg" onClick={() => navigate('/products')}>Mua ngay</Button>
